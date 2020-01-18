@@ -121,6 +121,8 @@ Fig2a=figure('pos',[20 -150 1400 750]);
 subplot(1,2,1);
 P2a = plot(k2,real(Integ_Di),k2,real(Integ_Mono),k2,imag(Integ_Di),...
 k2,imag(Integ_Mono),'LineWidth',1);
+[~, Idx_Max] = max(Integ_Di);
+%vertline2a = xline(k2(Idx_Max),'LineWidth',1.5,'LineStyle',':','Color','b');
 P2a(3).LineStyle = '--';
 P2a(4).LineStyle = '--';
 ax2a_1 = gca;
@@ -143,6 +145,7 @@ P2a_2 = plot(...
     k2*LD,imag(Integ_Di),...
     k2*LD,imag(Integ_Mono),...
     'Parent',ax2a_2,'LineWidth',1);
+%vertline2a = xline(k2(Idx_Max),'LineWidth',1);
 P2a_2(3).LineStyle = '--';
 P2a_2(4).LineStyle = '--';
 ax2a_2.FontSize = 15;
@@ -215,6 +218,7 @@ Integ_Di_kap = (F1(k2*l).*(besselj(0,k2*a).^2))./(epsL_kap(k2,kap,w));
 Integ_Mono_kap = (F3(k2*l).*(besselj(0,k2*a).^2))./(epsL_kap(k2,kap,w));
 
 Fig2b=figure('pos',[20 -150 1400 750]);
+[~, Idx_kap] = max(Integ_Di_kap);
 
 subplot(1,2,1);
 P2a2 = plot(...
@@ -222,9 +226,15 @@ P2a2 = plot(...
     k2,real(Integ_Mono_kap),...
     k2,imag(Integ_Di_kap),...
     k2,imag(Integ_Mono_kap),...
+    [k2(Idx_Max) k2(Idx_Max)],[-2.5e-2 0.02],...
+    [k2(Idx_kap) k2(Idx_kap)],[-2.5e-2 0.02],...
     'LineWidth',1);
 P2a2(3).LineStyle = '--';
 P2a2(4).LineStyle = '--';
+P2a2(5).LineStyle = ':';
+P2a2(6).LineStyle = ':';
+P2a2(5).LineWidth = 2;
+P2a2(6).LineWidth = 2;
 ax2a2_1 = gca;
 ax2a2_1.XScale = 'log';
 ax2a2_1.YScale = 'linear';
@@ -244,9 +254,15 @@ P2a2_2 = plot(...
     k2*LDk(kap),real(Integ_Mono_kap),...
     k2*LDk(kap),imag(Integ_Di_kap),...
     k2*LDk(kap),imag(Integ_Mono_kap),...
+    [k2(Idx_Max)*LDk(kap) k2(Idx_Max)*LDk(kap)],[-2.5e-2 0.02],...
+    [k2(Idx_kap)*LDk(kap) k2(Idx_kap)*LDk(kap)],[-2.5e-2 0.02],...    
     'Parent',ax2a2_2,'LineWidth',1);
 P2a2_2(3).LineStyle = '--';
 P2a2_2(4).LineStyle = '--';
+P2a2_2(5).LineStyle = ':';
+P2a2_2(6).LineStyle = ':';
+P2a2_2(5).LineWidth = 2;
+P2a2_2(6).LineWidth = 2;
 ax2a2_2.FontSize = 15;
 ax2a2_2.XLim = [1e0*LDk(kap) 1e7*LDk(kap)];
 ax2a2_2.YLim = [-2.5e-2 0.02];
@@ -255,7 +271,9 @@ ax2a2_2.YTickLabel = [];
 Le2a = legend('Dipole-wire Z Integrand - Real',...
 'Monopole Z Integrand - Real',...
 'Dipole-wire Z Integrand - Imag',...
-'Monopole Z Integrand - Imag');
+'Monopole Z Integrand - Imag',...
+'Location of Maxwellian Peak',...
+'Location of Kappa Peak');
 ax2a2_1.XLabel.String = 'Wavenumber (k)';
 ax2a2_1.XLabel.FontSize = 16;
 ax2a2_1.XLabel.FontWeight = 'bold';
@@ -316,7 +334,7 @@ ax2b2_1.YLabel.String = 'Integrand';
 ax2b2_1.YLabel.FontSize = 16;
 ax2b2_1.YLabel.FontWeight = 'bold';
 ax2b2_1.Title.String = 'k\lambda_{D-\kappa}';
-%saveas(Fig2b,'Fig2b-Di_vs_Mono_Integrand_kap5','epsc')
+%saveas(Fig2b,'Fig2b-Di_vs_Mono_Integrand_kap5_peaks','epsc')
 
 %% Figure 2c - Plot the integrand for F1(x) and F3(x) - Maxwellian/spheres
 
@@ -420,10 +438,10 @@ ax2b3_1.Title.String = 'k\lambda_D';
 %% Figure 3 - Plot QTN for wire, sphere and mono using F1(x), F2(x) & F3(x)
 
 % Load QTN Data:
-%load('Monopole_paper_QTN_data2.mat') 
+load('Monopole_paper_QTN_data2.mat') 
 % If you want to run the calculations from scratch, comment out above line
 % and uncomment line below:
-Run_QTN_Spectra_Calculations
+%Run_QTN_Spectra_Calculations
 
 % Use the f/fp vector for figures:
 f = f./fp;
@@ -550,10 +568,10 @@ f_width_Mono = f(Imax_Mono+Iwidth_Mono) - f(Imax_Mono);
 f2 = logspace(4,6,150);
 
 % Load Shot noise and impedance data:
-%load('Monopole_paper_ShotNoise_Z_data_updated2.mat');
+load('Monopole_paper_ShotNoise_Z_data_updated2.mat');
 % If you want to run the calculations from scratch, comment out above line
 % and uncomment line below:
-Run_Shot_Noise_and_Impedance_Calculations
+%Run_Shot_Noise_and_Impedance_Calculations
 
 % Normalize frequency vector for plotting:
 f2 = f2./fp;
